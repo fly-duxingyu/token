@@ -32,7 +32,7 @@ class Token
     public function generateToken($user, $is_json = false)
     {
         $user = $is_json ? $user : json_encode($user);
-        $token = sha1(md5($user . mt_rand(1, 100000) . uniqid() . 'robertvivi'));
+        $token = sha1(md5($user . mt_rand(1, 100000) . uniqid() . config('tokenConfig.token_prefix') ?: 'robertvivi'));
         session()->put($token, $user);
         return $token;
     }
