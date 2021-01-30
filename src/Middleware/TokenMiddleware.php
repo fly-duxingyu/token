@@ -1,6 +1,6 @@
 <?php
 
-namespace Duxingyu\Token\middleware;
+namespace Duxingyu\Token\Middleware;
 
 use Closure;
 use Duxingyu\Token\Token;
