@@ -37,11 +37,12 @@ class Token
      */
     public function generateToken($user, $is_json = false)
     {
+        $time = config('tokenConfig.time_out') ?: 300;
         $user = $is_json ? $user : json_encode($user);
         $token = sha1(md5($user . mt_rand(1, 100000) . uniqid() . config('tokenConfig.token_prefix') ?: 'robertvivi'));
         $redis = new Redis();
         $redis->connect('127.0.0.1', 6379);
-        $redis->set($token, $user);
+        $redis->setex($token, $time, $user);
         $redis->close();
         return $token;
     }
@@ -81,13 +82,17 @@ class Token
     /**
      * 验证session是否存在
      * @param $token_key
-     * @return false
+     * @return bool|int
      */
     public function validatorToken($token_key)
     {
+        $time = config('tokenConfig.time_out') ?: 300;
         $redis = new Redis();
         $redis->connect('127.0.0.1', 6379);
         $bool = $redis->exists($token_key);
+        if ($bool) {
+            $redis->setex($token_key, $time, $redis->get($token_key));
+        }
         $redis->close();
         return $bool;
     }

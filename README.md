@@ -10,7 +10,8 @@
 ```
 <?php
  return [
-     'token_prefix' => 'robertvivi'//加密token字符串
+     'token_prefix' => 'robertvivi',//加密token字符串
+     'time_out' => 300,//token超时时间秒 默认5分钟
  ];
 ```
 不配置默认使用 'robertvivi' 加密
