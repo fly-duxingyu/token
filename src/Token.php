@@ -2,9 +2,15 @@
 
 namespace Duxingyu\Token;
 
+use Redis;
+
 class Token
 {
     private static $tokenObj;
+    /**
+     * @var Redis
+     */
+    private $redis;
 
     public static function init()
     {
@@ -33,7 +39,10 @@ class Token
     {
         $user = $is_json ? $user : json_encode($user);
         $token = sha1(md5($user . mt_rand(1, 100000) . uniqid() . config('tokenConfig.token_prefix') ?: 'robertvivi'));
-        session()->put($token, $user);
+        $redis = new Redis();
+        $redis->connect('127.0.0.1', 6379);
+        $redis->set($token, $user);
+        $redis->close();
         return $token;
     }
 
@@ -43,7 +52,12 @@ class Token
      */
     public function deleteToken($token_key)
     {
-        session()->forget($token_key);
+        $redis = new Redis();
+        $redis->connect('127.0.0.1', 6379);
+        if ($redis->exists($token_key)) {
+            $redis->del($token_key);
+        };
+        $redis->close();
     }
 
     /**
@@ -53,11 +67,15 @@ class Token
      */
     public function getValue($token_key)
     {
-        if (session()->exists($token_key)) {
-            $data = session()->get($token_key);
-            return json_decode($data, true);
+        $data = [];
+        $redis = new Redis();
+        $redis->connect('127.0.0.1', 6379);
+
+        if ($redis->exists($token_key)) {
+            $data = json_decode($redis->get($token_key), true);
         }
-        return [];
+        $redis->close();
+        return $data;
     }
 
     /**
@@ -67,12 +85,10 @@ class Token
      */
     public function validatorToken($token_key)
     {
-        if (session()->exists($token_key)) {
-            $data = session()->get($token_key);
-            $this->generateToken($data, true);
-            return true;
-        } else {
-            return false;
-        }
+        $redis = new Redis();
+        $redis->connect('127.0.0.1', 6379);
+        $bool = $redis->exists($token_key);
+        $redis->close();
+        return $bool;
     }
 }
