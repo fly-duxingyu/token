@@ -28,14 +28,13 @@ class Token
 
     /**
      * 生成token
-     * @param $user
+     * @param $user string
      * @return string
      * @throws InvalidArgumentException
      */
     public function generateToken($user)
     {
         $config = config('tokenConfig');
-        $user = is_string($user) ? $user : json_encode($user, JSON_UNESCAPED_UNICODE + JSON_UNESCAPED_SLASHES);
         $suffix = !empty($config['token_prefix']) ? $config['token_prefix'] : 'robertvivi';
         $token = sha1(md5($user . mt_rand(1, 100000) . uniqid() . $suffix));
         $expiration_time = !empty($config['expiration_time']) ? $config['expiration_time'] : 86400;
@@ -46,11 +45,12 @@ class Token
     /**
      * 删除token
      * @param $token_key
+     * @return bool
      * @throws InvalidArgumentException
      */
     public function deleteToken($token_key)
     {
-        Cache::delete($token_key);
+        return Cache::delete($token_key);
     }
 
     /**
@@ -61,8 +61,7 @@ class Token
     public function getValue($token_key)
     {
         if (Cache::has($token_key)) {
-            $data = Cache::get($token_key);
-            return json_decode($data, true);
+            return Cache::get($token_key);
         }
         return [];
     }
