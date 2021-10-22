@@ -34,7 +34,7 @@ class Token
      */
     public function generateToken($user)
     {
-        $config = config('tokenConfig');
+        $config = config('duxingyuConfig');
         $suffix = !empty($config['token_prefix']) ? $config['token_prefix'] : 'robertvivi';
         $token = sha1(md5($user . mt_rand(1, 100000) . uniqid() . $suffix));
         $expiration_time = !empty($config['expiration_time']) ? $config['expiration_time'] : 86400;
