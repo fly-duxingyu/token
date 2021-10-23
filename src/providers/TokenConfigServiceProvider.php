@@ -13,12 +13,12 @@ class TokenConfigServiceProvider extends ServiceProvider
     public function register()
     {
         //获取配置文件
-        $config_path = config_path() . '/tokenConfig.php';
+        $config_path = config_path() . '/duxingyuConfig.php';
         if (file_exists($config_path)) {
             // 合并配置文件
             $this->mergeConfigFrom(
                 $config_path,
-                'tokenConfig'
+                'duxingyuConfig'
             );
         }
     }
@@ -30,12 +30,12 @@ class TokenConfigServiceProvider extends ServiceProvider
     public function boot()
     {
         // Config path.
-        $config_path = config_path() . '/tokenConfig.php';
+        $config_path = config_path() . '/duxingyuConfig.php';
         if (file_exists($config_path)) {
             // Publish config.
             $this->publishes(
-                [$config_path => config_path('tokenConfig.php')],
-                'tokenConfig'
+                [$config_path => config_path('duxingyuConfig.php')],
+                'duxingyuConfig'
             );
         }
 
