@@ -1,11 +1,10 @@
 <?php
 
-namespace Duxingyu\Token\Providers;
+namespace Duxingyu\Token\Middleware;
 
 use Closure;
 use Duxingyu\Token\Token;
 use Illuminate\Http\Request;
-use Psr\SimpleCache\InvalidArgumentException;
 
 class TokenMiddleware
 {
