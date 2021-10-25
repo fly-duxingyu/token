@@ -18,7 +18,7 @@ class TokenMiddleware
     public function handle(Request $request, Closure $next)
     {
         if (!$this->validatorToken($request)) {
-            return response(['msg' => 'Token失效请重新登录', 'code' => 401]);
+            return response(['message' => 'Token失效请重新登录', 'code' => 401]);
         }
         return $next($request);
     }
