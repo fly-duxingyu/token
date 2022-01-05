@@ -6,9 +6,6 @@ use Closure;
 use Duxingyu\Token\Token;
 use Illuminate\Http\Request;
 
-/**
- * 中间件
- */
 class TokenMiddleware
 {
     /**

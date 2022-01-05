@@ -4,9 +4,6 @@ namespace Duxingyu\Token\Providers;
 
 use Illuminate\Support\ServiceProvider;
 
-/**
- * 注册
- */
 class TokenConfigServiceProvider extends ServiceProvider
 {
     /**
